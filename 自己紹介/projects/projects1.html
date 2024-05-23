@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクト1 - C言語コード</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            margin: 2rem auto;
+            padding: 1rem;
+            max-width: 800px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            main {
+                margin: 1rem;
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>プロジェクト1 - C言語コード</h1>
+    </header>
+    <main>
+        <pre><code class="language-c">
+//使い方 
+1. プログラムをコンパイルして実行する。
+gcc -o calculator calculator.c -lm
+./calculator
+
+2. プログラムを実行すると電卓メニューが出てくる。
+
+3. メニューから操作したい項目の番号を入力し、「Enter」キーを押す。
+
+4. 13を入力すると終了する
+
+
+#include <stdio.h>
+    #include <stdio.h>
+        #include <math.h>
+        
+        void add();
+        void subtract();
+        void multiply();
+        void divide();
+        void power();
+        void square_root();
+        void modulus();
+        void sine();
+        void cosine();
+        void tangent();
+        void logarithm();
+        void change_angle_unit();
+        
+        typedef enum {DEGREES, RADIANS} AngleUnit;
+        AngleUnit current_angle_unit = DEGREES;
+        
+        double to_radians(double degrees);
+        double to_degrees(double radians);
+        
+        int main() {
+            int choice;
+        
+            while(1) {
+                printf("\n--- 電卓メニュー ---\n");
+                printf("1. 足し算\n");
+                printf("2. 引き算\n");
+                printf("3. 掛け算\n");
+                printf("4. 割り算\n");
+                printf("5. 累乗\n");
+                printf("6. 平方根\n");
+                printf("7. 余り計算\n");
+                printf("8. 正弦\n");
+                printf("9. 余弦\n");
+                printf("10. 正接\n");
+                printf("11. 対数\n");
+                printf("12. 角度単位の切り替え\n");
+                printf("13. 終了\n");
+                printf("選択してください: ");
+                scanf("%d", &choice);
+        
+                switch(choice) {
+                    case 1:
+                        add();
+                        break;
+                    case 2:
+                        subtract();
+                        break;
+                    case 3:
+                        multiply();
+                        break;
+                    case 4:
+                        divide();
+                        break;
+                    case 5:
+                        power();
+                        break;
+                    case 6:
+                        square_root();
+                        break;
+                    case 7:
+                        modulus();
+                        break;
+                    case 8:
+                        sine();
+                        break;
+                    case 9:
+                        cosine();
+                        break;
+                    case 10:
+                        tangent();
+                        break;
+                    case 11:
+                        logarithm();
+                        break;
+                    case 12:
+                        change_angle_unit();
+                        break;
+                    case 13:
+                        printf("終了します。\n");
+                        return 0;
+                    default:
+                        printf("無効な選択です。再度選択してください。\n");
+                }
+            }
+        }
+        
+        void add() {
+            double num1, num2;
+            printf("足し算\n");
+            printf("最初の数を入力してください: ");
+            scanf("%lf", &num1);
+            printf("次の数を入力してください: ");
+            scanf("%lf", &num2);
+            printf("結果: %.2lf\n", num1 + num2);
+        }
+        
+        void subtract() {
+            double num1, num2;
+            printf("引き算\n");
+            printf("最初の数を入力してください: ");
+            scanf("%lf", &num1);
+            printf("次の数を入力してください: ");
+            scanf("%lf", &num2);
+            printf("結果: %.2lf\n", num1 - num2);
+        }
+        
+        void multiply() {
+            double num1, num2;
+            printf("掛け算\n");
+            printf("最初の数を入力してください: ");
+            scanf("%lf", &num1);
+            printf("次の数を入力してください: ");
+            scanf("%lf", &num2);
+            printf("結果: %.2lf\n", num1 * num2);
+        }
+        
+        void divide() {
+            double num1, num2;
+            printf("割り算\n");
+            printf("最初の数を入力してください: ");
+            scanf("%lf", &num1);
+            printf("次の数を入力してください: ");
+            scanf("%lf", &num2);
+            if (num2 != 0) {
+                printf("結果: %.2lf\n", num1 / num2);
+            } else {
+                printf("エラー: 0で割ることはできません。\n");
+            }
+        }
+        
+        void power() {
+            double base, exponent;
+            printf("累乗\n");
+            printf("底を入力してください: ");
+            scanf("%lf", &base);
+            printf("指数を入力してください: ");
+            scanf("%lf", &exponent);
+            printf("結果: %.2lf\n", pow(base, exponent));
+        }
+        
+        void square_root() {
+            double num;
+            printf("平方根\n");
+            printf("数を入力してください: ");
+            scanf("%lf", &num);
+            if (num >= 0) {
+                printf("結果: %.2lf\n", sqrt(num));
+            } else {
+                printf("エラー: 負の数の平方根は計算できません。\n");
+            }
+        }
+        
+        void modulus() {
+            int num1, num2;
+            printf("余り計算\n");
+            printf("最初の整数を入力してください: ");
+            scanf("%d", &num1);
+            printf("次の整数を入力してください: ");
+            scanf("%d", &num2);
+            if (num2 != 0) {
+                printf("結果: %d\n", num1 % num2);
+            } else {
+                printf("エラー: 0で割ることはできません。\n");
+            }
+        }
+        
+        void sine() {
+            double angle;
+            printf("正弦\n");
+            printf("角度を入力してください: ");
+            scanf("%lf", &angle);
+            if (current_angle_unit == DEGREES) {
+                angle = to_radians(angle);
+            }
+            printf("結果: %.2lf\n", sin(angle));
+        }
+        
+        void cosine() {
+            double angle;
+            printf("余弦\n");
+            printf("角度を入力してください: ");
+            scanf("%lf", &angle);
+            if (current_angle_unit == DEGREES) {
+                angle = to_radians(angle);
+            }
+            printf("結果: %.2lf\n", cos(angle));
+        }
+        
+        void tangent() {
+            double angle;
+            printf("正接\n");
+            printf("角度を入力してください: ");
+            scanf("%lf", &angle);
+            if (current_angle_unit == DEGREES) {
+                angle = to_radians(angle);
+            }
+            printf("結果: %.2lf\n", tan(angle));
+        }
+        
+        void logarithm() {
+            double num;
+            int choice;
+            printf("対数\n");
+            printf("1. 自然対数 (ln)\n");
+            printf("2. 常用対数 (log10)\n");
+            printf("選択してください: ");
+            scanf("%d", &choice);
+            printf("数を入力してください: ");
+            scanf("%lf", &num);
+            if (num > 0) {
+                if (choice == 1) {
+                    printf("結果: %.2lf\n", log(num));
+                } else if (choice == 2) {
+                    printf("結果: %.2lf\n", log10(num));
+                } else {
+                    printf("無効な選択です。\n");
+                }
+            } else {
+                printf("エラー: 0以下の数の対数は計算できません。\n");
+            }
+        }
+        
+        void change_angle_unit() {
+            if (current_angle_unit == DEGREES) {
+                current_angle_unit = RADIANS;
+                printf("角度単位がラジアンに変更されました。\n");
+            } else {
+                current_angle_unit = DEGREES;
+                printf("角度単位が度に変更されました。\n");
+            }
+        }
+        
+        double to_radians(double degrees) {
+            return degrees * M_PI / 180.0;
+        }
+        
+        double to_degrees(double radians) {
+            return radians * 180.0 / M_PI;
+        }
+        
+
+}
+        </code></pre>
+    </main>
+</body>
+</html>
+
+
+
+        </code></pre>
+    </main>
+</body>
+</html>

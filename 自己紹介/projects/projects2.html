@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクト2 - JAVAコード</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            margin: 2rem auto;
+            padding: 1rem;
+            max-width: 800px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            main {
+                margin: 1rem;
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>プロジェクト2 - JAVAコード</h1>
+    </header>
+    <main>
+        <pre><code class="language-java">
+            ----------------
+            JAVAではテキストベースのアドベンチャーゲームを作ってみました。
+            もしよければ遊んでみてください。
+            ---------------- 
+            import java.util.HashMap;
+            import java.util.Map;
+            import java.util.Scanner;
+            
+            public class AdventureGame {
+                private static Map<String, Room> rooms = new HashMap<>();
+                private static boolean hasKey = false;
+                private static boolean hasTreasure = false;
+                private static boolean hasMap = false;
+            
+                public static void main(String[] args) {
+                    initializeRooms();
+                    Scanner scanner = new Scanner(System.in);
+            
+                    System.out.println("テキストベースのアドベンチャーゲームへようこそ！");
+                    System.out.println("あなたは宝物を見つけるために家の中を探索しています。");
+            
+                    Room currentRoom = rooms.get("玄関");
+            
+                    while (true) {
+                        System.out.println("\n現在の部屋: " + currentRoom.getName());
+                        System.out.println(currentRoom.getDescription());
+                        System.out.println("次にどの部屋に行きますか？（" + String.join("、", currentRoom.getExits().keySet()) + "）");
+                        String choice = scanner.nextLine();
+            
+                        if (currentRoom.getExits().containsKey(choice)) {
+                            currentRoom = currentRoom.getExits().get(choice);
+                            if (currentRoom.hasItem()) {
+                                handleItem(currentRoom);
+                            }
+                        } else {
+                            System.out.println("その部屋は存在しません。");
+                        }
+            
+                        if (hasTreasure) {
+                            System.out.println("おめでとうございます！宝物を見つけました！");
+                            break;
+                        }
+                    }
+            
+                    scanner.close();
+                    System.out.println("ゲームを終了します。");
+                }
+            
+                private static void initializeRooms() {
+                    Room entrance = new Room("玄関", "ここは玄関です。");
+                    Room livingRoom = new Room("リビングルーム", "ここはリビングルームです。広くて快適です。");
+                    Room kitchen = new Room("キッチン", "ここはキッチンです。食べ物の香りがします。");
+                    Room bedroom = new Room("ベッドルーム", "ここはベッドルームです。鍵がかかっています。", "鍵");
+                    Room bathroom = new Room("バスルーム", "ここはバスルームです。");
+                    Room attic = new Room("屋根裏", "ここは屋根裏です。暗くて静かです。", "宝物");
+                    Room garden = new Room("庭", "ここは庭です。外の空気が気持ちいいです。", "地図");
+            
+                    entrance.setExit("リビングルーム", livingRoom);
+                    entrance.setExit("庭", garden);
+            
+                    livingRoom.setExit("玄関", entrance);
+                    livingRoom.setExit("キッチン", kitchen);
+                    livingRoom.setExit("ベッドルーム", bedroom);
+            
+                    kitchen.setExit("リビングルーム", livingRoom);
+                    kitchen.setExit("バスルーム", bathroom);
+            
+                    bedroom.setExit("リビングルーム", livingRoom);
+            
+                    bathroom.setExit("キッチン", kitchen);
+                    bathroom.setExit("屋根裏", attic);
+            
+                    garden.setExit("玄関", entrance);
+            
+                    rooms.put("玄関", entrance);
+                    rooms.put("リビングルーム", livingRoom);
+                    rooms.put("キッチン", kitchen);
+                    rooms.put("ベッドルーム", bedroom);
+                    rooms.put("バスルーム", bathroom);
+                    rooms.put("屋根裏", attic);
+                    rooms.put("庭", garden);
+                }
+            
+                private static void handleItem(Room room) {
+                    switch (room.getItem()) {
+                        case "鍵":
+                            if (!hasKey) {
+                                System.out.println("リビングルームで鍵を見つけました！");
+                                hasKey = true;
+                            } else {
+                                System.out.println("鍵はすでに見つけています。");
+                            }
+                            break;
+                        case "宝物":
+                            if (hasKey) {
+                                System.out.println("鍵を使って宝箱を開けました！宝物を見つけました！");
+                                hasTreasure = true;
+                            } else {
+                                System.out.println("宝箱がありますが、鍵が必要です。");
+                            }
+                            break;
+                        case "地図":
+                            if (!hasMap) {
+                                System.out.println("庭で地図を見つけました！他の部屋の位置がわかります。");
+                                hasMap = true;
+                            } else {
+                                System.out.println("地図はすでに見つけています。");
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            
+            class Room {
+                private String name;
+                private String description;
+                private String item;
+                private Map<String, Room> exits = new HashMap<>();
+            
+                public Room(String name, String description) {
+                    this(name, description, null);
+                }
+            
+                public Room(String name, String description, String item) {
+                    this.name = name;
+                    this.description = description;
+                    this.item = item;
+                }
+            
+                public String getName() {
+                    return name;
+                }
+            
+                public String getDescription() {
+                    return description;
+                }
+            
+                public String getItem() {
+                    return item;
+                }
+            
+                public boolean hasItem() {
+                    return item != null;
+                }
+            
+                public Map<String, Room> getExits() {
+                    return exits;
+                }
+            
+                public void setExit(String direction, Room room) {
+                    exits.put(direction, room);
+                }
+            }
+            
+        </code></pre>
+    </main>
+</body>
+</html>

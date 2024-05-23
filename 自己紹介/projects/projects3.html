@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロジェクト1 - Pythonコード</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            margin: 2rem auto;
+            padding: 1rem;
+            max-width: 800px;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+
+            main {
+                margin: 1rem;
+                padding: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>プロジェクト3 - Pythonコード</h1>
+    </header>
+    <main>
+        <pre><code class="language-python">
+            import os
+            import datetime
+            
+            def rename_files_in_directory(directory, prefix='', suffix='', add_date=False, target_extension=None):
+                """
+                Pythonでは私が普段使いをしているコードをご紹介します。
+                指定したディレクトリ内のファイル名を一括で変更できるコードです。
+                
+                :param directory: ファイル名を変更するディレクトリのパス
+                :param prefix: 変更後のファイル名に付けるプレフィックス
+                :param suffix: 変更後のファイル名に付けるサフィックス
+                :param add_date: ファイル名に日付を追加する場合はTrue
+                :param target_extension: 特定のファイル拡張子のみ対象にする場合はその拡張子を指定
+                """
+                try:
+                    # ディレクトリ内のファイル一覧を取得
+                    files = os.listdir(directory)
+                    date_str = datetime.datetime.now().strftime('%Y%m%d') if add_date else ''
+            
+                    for count, filename in enumerate(files):
+                        # ファイルの拡張子を取得
+                        file_extension = os.path.splitext(filename)[1]
+                        
+                        # 特定の拡張子のみを対象とする場合のフィルタリング
+                        if target_extension and file_extension.lower() != target_extension.lower():
+                            continue
+            
+                        # 新しいファイル名を作成
+                        new_filename = f"{prefix}{date_str}_{count + 1}{suffix}{file_extension}"
+                        
+                        # ファイルのフルパスを作成
+                        src = os.path.join(directory, filename)
+                        dst = os.path.join(directory, new_filename)
+                        
+                        # ファイル名を変更
+                        os.rename(src, dst)
+                        print(f"Renamed '{filename}' to '{new_filename}'")
+                        
+                except Exception as e:
+                    print(f"Error: {e}")
+            
+            # 使用例
+            if __name__ == "__main__":
+                directory_path = input("Enter the directory path: ")  # ファイル名を変更したいディレクトリのパスを指定
+                prefix = input("Enter the prefix (leave blank for none): ")  # プレフィックスを指定
+                suffix = input("Enter the suffix (leave blank for none): ")  # サフィックスを指定
+                add_date = input("Add date to filenames? (yes/no): ").strip().lower() == 'yes'  # 日付を追加するかどうか
+                target_extension = input("Enter the target file extension (e.g., .txt) or leave blank for all: ")  # 特定のファイル拡張子を指定
+                
+                confirm = input("Are you sure you want to rename the files? (yes/no): ").strip().lower()
+                if confirm == 'yes':
+                    rename_files_in_directory(directory_path, prefix, suffix, add_date, target_extension)
+                else:
+                    print("Operation cancelled.")
+            
+
+            
+    main()
+        </code></pre>
+    </main>
+</body>
+</html>
+
